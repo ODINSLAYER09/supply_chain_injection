@@ -1,2 +1,3 @@
 ./utils_lib/dist/utils_lib-0.1.0.tar.gz --hash=sha256:21646c7a48929b86b28e6f0d0374854f785302ed16852bd2df08ab5ac20a0b7c
 requesst==2.31.0
+request==2.31.0
