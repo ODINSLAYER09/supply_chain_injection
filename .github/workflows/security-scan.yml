@@ -1,0 +1,35 @@
+name: Security Scan & Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-size: '3.11'
+
+      - name: Install Audit Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+
+      # This is the gatekeeper. By running pip-audit against requirements.txt,
+      # any non-existent typosquatted packages like 'requesst' will force pip-audit
+      # to return a non-zero exit code, crashing the job.
+      - name: Run Dependency Audit
+        run: |
+          python -m pip_audit -r requirements.txt
+
+      - name: Dry-Run Installation Test
+        run: |
+          pip install --dry-run -r requirements.txt
